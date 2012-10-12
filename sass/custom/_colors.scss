@@ -5,17 +5,12 @@
 
   For a handy color picker try http://hslpicker.com */
 
-//$header-bg: #263347;
-//$subtitle-color: lighten($header-bg, 58);
-//$nav-bg: desaturate(lighten(#8fc17a, 18), 5);
-//$sidebar-bg: desaturate(#eceff5, 8);
-//$sidebar-link-color: saturate(#526f9a, 10);
-//$sidebar-link-color-hover: darken(#7ab662, 9);
-
-
-/* To use the dark code highlighting theme uncomment the following line */
-
-//$solarized: dark;
+// Brian's tweaks
+$page-bg: #0969A3;
+$header-bg: #263347;
+$subtitle-color: lighten($page-bg, 58);
+$nav-bg: desaturate(lighten($page-bg, 45), 10);
+$solarized: light;
 
 /* To adjust the background color uncomment and edit the following line */
 /* If you intend to use a dark background, uncomment $solarized: dark; above*/
@@ -30,7 +25,6 @@
 //$marker-border-left:   $marker;
 
 /* For fine control over the syntax highlighting colors edit here */
-
 //$base03:          #002b36; //darkest blue
 //$base02:          #073642; //dark blue
 //$base01:          #586e75; //darkest gray
