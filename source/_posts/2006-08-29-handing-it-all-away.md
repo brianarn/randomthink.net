@@ -1,0 +1,41 @@
+---
+title: Handing it all away
+layout: post
+categories:
+- Personal
+---
+So, my friend [Carolyn][1] wrote up [this post][2], talking about commenting on people. As someone who also had a Geocities page, as well as an AOL page with their lovely Guestbook and all (built in Notepad, baby), it sparked up some fun memories, such as when I thought that page counters were cool and I’d sit there refreshing to watch it go up. I remember when it hit 3000, I was excited. Counters were such a funny topic. Aside: For this year, I’m averaging 16,500 unique visitors a month, although I really have no idea why there’s so many of you. I think a lot of it is spammers hitting the blog, but that’s not what I’m wanting to talk about with this post.
+
+What Carolyn’s post made me think about is how much we can now easily offload to other companies, in the way of Internet applications.  For all of the things she listed in her post, there are both solutions that one can install in their own web space, as well as free and paid versions available from other companies. Things like [Flickr][3] for photos or [Blogger][4]/[LiveJournal][5]/[WordPress][6] for blogging, [del.icio.us][7] for bookmarking and so on are all freely available services for people to connect and share.
+
+Having been floating on the internets for over a decade now (which still blows my mind when I think of it that way), I generally look to things I can do for myself. While I do have things like Blogger, LiveJournal, WordPress.com, Flickr, and del.icio.us accounts, I don’t generally look at them as primary tools. I have my blog service accounts primarily for commenting on other blogs, and not for posting. I use Flickr to grab cell phone uploads, but that’s about it. I’ve generally chosen to host everything for myself, such as this blog here, running [WordPress][8], or my [Gallery][9] installation for all of my pictures and screenshots. I even have a [SiteBar][10] installation for bookmarks, and just recently found out they prefer to offer hosted bookmarking now, although the software is still available.
+
+Generally, hosting things myself has been just fine. However, I’m really starting to grow weary of the process of upgrading some things myself. I mean, some things, like WordPress, are super easy to upgrade. The last time I had to upgrade Gallery, though, I had to start it on a browser and basically leave it overnight and hope that it finished successfully, and that was only after three unsuccessful attempts. On top of that, such things have made me a real spam target. I had to turn off comments on my Gallery after I found over 12k spam comments littered about when I was surfing one day. I don’t even have a good PageRank anymore (used to be 5, was 2 last I checked), so I don’t know why I’m still hit so hard.
+
+Over the past few months, I’ve started considering moving some of my stuff off to these hosted services. I don’t think I’ll ever move my blog to a WordPress.com or LJ account full-time, because there aren’t need for frequent updates and things like Akismet really cut down on the spam, and there’s still something satisfying about doing a manual upgrade once in awhile. Just about everything else, though, I’m really thinking of handing away. I’ve kind of already started doing so with some other things.
+
+The big example has been my move to [Gmail][11]. Most people know that if you email me at brian at randomthink, you’re going to reach me. That address is still totally valid. However, it’s just a forwarder these days. It hits me over at brianarn on Gmail. I used to have this big complicated solution that involved [SpamAssassin][12] filtering my mail and then using [procmail][13] to filter messages into folders, and then I’d run Bayesian filters built into SA to make my spam filtering process much cleaner. I get somewhere on the order of about 10 spam messages an hour, and I’d queue them up and then burn an hour a week double-checking that I wasn’t getting any false positives or misses, and at first it was fun to watch, but then I really got tired of it. Now, I use Gmail, and while I do get about one false positive a week and probably about four misses a day, it’s convenient. Plus, labels are a lot like tagging, which is pretty nice. I can label a message with several messages, which makes retrieval easy. On top of that, having Google searching going is convenient, and I don’t have to delete anything anymore, which seems trivial at first, but I’m finding that I like being able to dig through things.
+
+In some ways, it goes up a level past that even, since I used to run my own dedicated server (back when I ran a one-man hosting business). These days, I’m just a happy [DreamHost][14] customer, handing off the administration to others. I’ve been with them since December and have been pretty happy with most things.
+
+Recently, I’ve also started offloading bookmarking on others. I’d started using del.icio.us to help me with my comics run and random link dumping and such. I don’t really know what motivated me to try it out again. I do like the idea of tags. However, I’m still a big fan of the hierarchical system of bookmarks (a place for everything etc.) and while I still think tags are great in some ways, I wanted to be able to sort my links alphabetically and it just wasn’t exactly what I wanted. I had a coworker go off about the wonders of [Google Browser Sync][15], which I’ve installed today. I have to say, so far I’m impressed with the idea. I can use Firefox’s standard bookmark system, but have my bookmarks (as well as cookies, which some people hate but I love for auto-logins and such) synced up for me. I figure, I’ve already handed Google my email address, handing some cookies around probably isn’t the worst thing in the world. I don’t use saved passwords, so the truly vital stuff such as my Paypal and banking information won’t get saved, so no worries. However, if you want to sync just bookmarks, you can do that too. Really, it’s pretty slick.
+
+I feel like I may have gotten off-point a bit, and I’ve already rambled enough, so let’s bring it into focus a bit. The more I look at all of the things out there, the more I seriously consider just handing off most everything to other services. Flickr continues to add more and more awesome features. Gmail is easily my favorite way to do email, and I’ve dabbled in a ton of systems. I can use a combo of Google Browser Sync and del.icio.us to keep both neat and tidy bookmarks on my browser as well as to keep a stash of links I may want someday. However, I feel hesitant to hand it all off, because I know that I can do it all myself. I can keep a server running, I can keep blogs and email systems and photo galleries and everything running all on my own, so why should I hand it off to someone else? Plus, do I really want to be handing my content off to some company, possibly not being able to retrieve it all someday? Is it worth the frustration of keeping one step ahead on security patches to keep my own content?
+
+In the end, I think I’ll still keep some things to myself. I still really enjoy WordPress. I’m really on the edge of moving to Flickr for my pictures, as there’s another security update out there for Gallery and I just don’t know that I really want to bother with it again. I’ve already decided to move my email, and now I’m moving bookmarks too, and will probably be moving my address book information into Gmail’s contact list. I still feel really dirty considering it though, which is keeping me from just taking the dive already and doing it.
+
+ [1]: http://www.horizonpurple.com/
+ [2]: http://www.horizonpurple.com/2006/08/29/so-what-do-you-think-of-me/
+ [3]: http://www.flickr.com/
+ [4]: http://www.blogger.com/
+ [5]: http://www.livejournal.com/
+ [6]: http://www.wordpress.com/
+ [7]: http://del.icio.us/
+ [8]: http://www.wordpress.org/
+ [9]: http://gallery.menalto.com/
+ [10]: http://www.sitebar.org/
+ [11]: http://mail.google.com/
+ [12]: http://spamassassin.apache.org/
+ [13]: http://www.procmail.org/
+ [14]: http://www.dreamhost.com/r.cgi?136942
+ [15]: http://www.google.com/tools/firefox/browsersync/

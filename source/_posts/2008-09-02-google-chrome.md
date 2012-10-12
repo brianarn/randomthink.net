@@ -1,0 +1,37 @@
+---
+title: Google Chrome!
+layout: post
+categories:
+- Personal
+  - Technical
+---
+In case you haven’t heard yet, Google released a new browser today, named [Google Chrome][1]. They’ve released [a 38-page comic book by Scott McCloud][2] to discuss why they felt that a new browser was needed, and it’s actually a well-written comic. It does a great job of presenting the technical aspects in a very user-friendly fashion. So, go read that. I’ll wait for you.
+
+Done? Okay. So, here’s my thoughts — and keep in mind, I’m a web developer by profession, so stuff like this gets me excited. WALL OF TEXT AHOY!
+
+Actually, before I get to the wall — here’s the TL;DR version for you. *Google has released a new browser. It’s very awesome and has potential to improve not just the web, but every browser out there. Check it out.*  
+  
+I ran some JavaScript tests against Chrome and FF3 to contrast execution. Honestly, that’s what has me the most excited here, so I wanted to see what it could do. Chrome was actually nearly twice as slow on the regex and one or two other tests, but averaged out 1.85x faster than FF3 overall. Compared to the FF3.1a2 that I did the same testing with, Chrome is going to beat FF3.1 out, but not by the same margin — perhaps only about 1.1x the speed. That being said, many tests between FF3 current and Chrome ran at 3x or greater Chrome-side — a few were even a full 15x faster. Seriously, OMG. Happy happy developer am I.
+
+FF3.1 and WebKit (Safari 4 effectively) have both been talking about TraceMonkey and SquirrelFish, their respective JIT compiling JS engines. Chrome has V8, which is effectively the same thing, although the description of V8 is more fleshed out and friendly than any I saw of TM or SF. Seriously, did you read the comic book? It’s actually very well done. Anyhow, since every single one is open source, I’m really looking forward to what happens when they compare notes and optimize the heck out of the engines. From my playing about, V8 is faster than TM is faster than SF, but really, the differences between the three aren’t immense. Compared to the current JS engines though, we’re talking amazing leaps and bounds. JS is looking nicer by the day for serious development at this point.
+
+I also tried to run the test here — http://blog.mozilla.com/schrep/2008/08/22/what-can-you-do-when-your-browser-is-7-times-faster/ — but it doesn’t work at all. Chrome isn’t perfect by any means. I was somewhat surprised to see this piece of code not work. At a cursory glance, it’s primarily just YUI components, and I didn’t immediately see anything FF-specific. The page claims that the demo works in all versions of FF3 and up (and it does work in FF3, just horribly slow) and WebKit nightlies. It doesn’t work in Safari 3 either, so perhaps the version of WebKit that Chrome is using isn’t from nightlies, but from a stable release. I suspect it’ll work eventually.
+
+Yet more JavaScript ramble! A couple of months back, I wrote a version of Conway’s Game of Life that is pure JavaScript (uses the Canvas element to render) — http://www.randomthink.net/canvas/life.html — and so I set it to run at the max speed that it could, and put it up in both Chrome and Firefox. Firefox was 200+ ticks ahead when I started the Chrome one (not an immense amount of time, since it’s effectively running as fast as it can, but still). By the time they both ticked past the 30k tick mark, Chrome was over 3000 ticks ahead. It’s definitely running notably faster than FF3. It’s doing nested loops over a somewhat large data structure, so I didn’t expect huge speed differences, so it did surprise me to see how well Chrome was doing.
+
+I should also note here, the garbage collection in Chrome is apparently vastly improved over Firefox, and I’d suspect over pretty much every browser, really. The comic mentions improved GC, but I didn’t expect what I saw. Over the life of the process, the tab for Chrome never broke past 13MB of RAM, and if anything, was slowly shrinking as it ran. I do love that I was able to see the individuals tabs as processes, BTW. Watching Firefox, it was doing nothing but running my game of life (seriously, I shut down all Firefox instances and started up just one, and the game of life was the first thing I loaded, nothing else going on with it), and its memory usage was bouncing between 55-85MB. It’d slowly climb as the execution continued, then the GC would very obviously kick in and it’d drop from 85MB to 55MB, then start the climb again. It’d look like a saw blade if graphed, whereas Chrome’s memory footprint was nearly level, with an ever-so-slight decline to it.
+
+Then I left ‘em both up but switched tabs in Chrome. When I came back to Life after a few minutes, it’d actually lost ground and was nearly 3000 ticks behind FF. Apparently, Chrome does some de-prioritizing of tabs if they’re not the front-most tab in their window. It doesn’t stop execution — since they’re individual processes, I was able to watch processor load, and it dropped from ~45-48% of CPU to ~13-20% when I switched it out of being the front tab. It’s still enough that most things run fine (YouTube in a background tab is fine, I could still hear it, and it’s not like my game of life actually stopped executing), but it does de-prioritize. Safari does this as well, although it has a bit more of a marked drop than what I saw in Chrome. Just to see, I pulled the tab out into its own window (loved that in Safari 3, SO nice to see it here, you can merge back by dragging too, also like Safari), and it kept its high priority even when I did other things in the original window, since it was the front-most tab in its own window.
+
+Inspecting elements provides effectively the same interface that Firebug’s DOM inspector does, and on the Resources tab in the inspector, you can get a full JS console and some graphs that seem akin to the Network tab of Firebug, which is nice. Really, it has the pieces of Firebug that I want, but without the apparent overhead that Firebug does incur (1.2 is pretty good, and tries to stay friendly, but still, not quite this good, I don’t think).
+
+The render engine is also notably faster — at least, visibly. I haven’t actually ran any tests against it, but stuff just seems to render MUCH more quickly than in any other browser I’ve played with.
+
+It also has built-in support for Google Gears (which is not surprising, really — I mean, this \*is\* the Google browser). That’s pretty awesome. I don’t have much more to say about that, really, other than that I like the prospect of Gears, and look forward to seeing Google push it out for every major browser (there’s already Gears for Firefox, a beta for Safari, and I’m fairly certain they’re working on a version for IE).
+
+On the whole, as both a web developer and Google apps user and general netizen, I am damned excited and want my Mac beta already. I run very few Firefox extensions anyhow, and Chrome has most of the functionality that I want. I could see myself moving to it full-time. FF3 is what it took for me to move away from Safari (seriously, FF2 on Mac = BLOATED PIECE OF JUNK, FF3 on Mac = Happy Times), and I think Chrome could take me away from FF3.
+
+I do mildly miss having a bookmarks bar, but apparently I can rebuild something akin to it on the new tab page. I’m still torn on whether I really like that feature or not. It shows me how much time I waste at non-work sites. :P
+
+ [1]: http://www.google.com/chrome
+ [2]: http://www.google.com/googlebooks/chrome/
