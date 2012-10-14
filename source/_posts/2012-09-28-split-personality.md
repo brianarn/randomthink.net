@@ -17,6 +17,8 @@ one on what it's like to be a new parent (there's something drastically
 different in the time since the last post), but the thing is, the audiences for
 those topics are drastically different.
 
+<!-- more -->
+
 Navel gazing regarding blogging isn't new for me. Really, my concern is crossing
 the streams. I suspect I still have some family and friends who'd like to read
 the personal stuff but don't know what a closure is, while others would be

@@ -7,9 +7,11 @@
 
 // Brian's tweaks
 $page-bg: #0969A3;
-$header-bg: #263347;
+$header-bg: #03436A;
 $subtitle-color: lighten($page-bg, 58);
 $nav-bg: desaturate(lighten($page-bg, 45), 10);
+$footer-bg: #3D9AD1;
+$footer-color: darken($footer-bg, 38);
 $solarized: light;
 
 /* To adjust the background color uncomment and edit the following line */

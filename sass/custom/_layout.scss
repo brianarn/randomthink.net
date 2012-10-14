@@ -1,7 +1,7 @@
 // Here you can easily change your sites's layout.
 // To give it a try, uncomment some of the lines below, make changes, rebuild your blog, and see how it works.
 
-$max-width: 1069px;
+$max-width: 1000px;
 $indented-lists: true;
 
 // Padding used for layout margins
@@ -11,7 +11,7 @@ $indented-lists: true;
 //$pad-wide: 55px;
 
 // Sidebar widths used in media queries
-//$sidebar-width-medium: 240px;
+$sidebar-width-medium: 200px;
 //$sidebar-pad-medium: 15px;
+$sidebar-width-wide: 240px;
 //$sidebar-pad-wide: 20px;
-//$sidebar-width-wide: 300px;

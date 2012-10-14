@@ -14,7 +14,7 @@ layout: nil
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  {% for post in site.posts limit: 20 %}
+  {% for post in site.posts limit: 2 %}
     <entry>
       {% include feed_entry.xml %}
       <content type="html"><![CDATA[{{ content | cdata_escape }}]]></content>

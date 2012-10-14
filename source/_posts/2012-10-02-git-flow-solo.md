@@ -6,6 +6,9 @@ comments: true
 categories: 
 - Technical
 ---
+
+![Git Log with Graph](/images/blog/2012-10-02-git-flow-solo-graph.png)
+
 The other day on Twitter, I was discussing workflow with my friend [Geoff][],
 and I mentioned that I use [Git Flow][] for some of the work that I do. He
 mentioned that he's a solo developer on most of his projects, and so he's more

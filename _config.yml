@@ -16,7 +16,7 @@ description:
 date_format: "ordinal"
 
 # RSS / Email (optional) subscription links (change if using something like Feedburner)
-subscribe_rss: /atom.xml
+subscribe_rss: /blog/feed/
 subscribe_email:
 category_feeds: false
 # RSS feeds can list your email address if you like
@@ -67,7 +67,7 @@ respectfully_social: true
 
 # Github repositories
 github_user: brianarn
-github_repo_count: 0
+github_repo_count: 3
 github_show_profile_link: true
 github_skip_forks: true
 

@@ -26,6 +26,8 @@ A few things stuck out at me:
   meta crap that meant something to me but is relatively meaningless to everyone
   else (in a sense, much like this post)
 
+<!-- more -->
+
 Of those 688, I wound up hiding 584 of them. I’m causing some massive linkrot in
 the process, but I tried to keep things that I felt had some sort of enduring
 value. Whether they’re reflective of me in some way or discussing personal
