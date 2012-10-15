@@ -3,20 +3,20 @@ layout: post
 title: "Callbacks and Promises"
 date: 2012-10-14 21:36
 comments: true
-categories: 
+categories:
 - Technical
 ---
 
 Anyone who's written even a little bit of JavaScript is likely familiar with the
-callback pattern. Even if you don't know the name, you've probably used it. We
-will often pass around functions to other functions as a way for the other
-function to let us know when something has happened that we care about -- to
-give us a call back, as it were. In particular, callbacks are a fantastic
-solution to responding to things that happen asynchrously.
+callback pattern. Even if you don't know it by that name, you've probably
+written code using it. When calling a function, we'll pass it another function
+as an argument, which will be used to let us know that something has happened.
+In particular, callbacks are used for responding to things that happen
+asynchronously.
 
-For example, events are based completely on this pattern. We take a DOM node,
-and provide it with a callback function to indicate that we want to be alerted
-to our user interacting with it in some way.
+For example, event handling is based on this pattern. We take a DOM node and
+provide it with a callback function to indicate that we want to be alerted to
+our user interacting with it in some way.
 
 <!-- more -->
 
@@ -30,11 +30,12 @@ This sort of code is very commonplace, and is one of the more powerful features
 of JavaScript. When using code that accepts callbacks, we don't usually think
 too much of it.
 
-However, more advanced applications may require us to start building our own
-APIs. In this scenario, it may be of benefit to us to create some code that is
-on the receiving end of a callback. It's quite easy to create a function that
-accepts callbacks. Because JavaScript functions are [first-class objects][1],
-you can receive them as arguments, and then simply invoke them.
+As we create richer applications, we'll often need to create functions that pass
+information back to our users. If the information we're passing back comes from
+asynchronous sources, it may be beneficial to create functions that that accept
+callbacks. It's quite easy to create a function that accepts callbacks. Because
+JavaScript functions are [first-class objects][1], you can receive them as
+arguments, and then simply invoke them.
 
 I prefer [Dojo][] these days, but for simplicity's sake, I'll show an example
 using [jQuery][], as I suspect that's what more people will be familiar with.
@@ -57,9 +58,10 @@ function getManagers(callback){
 
 Notice that in this case, I'm not returning anything from the function. I'm
 communicating with my user via the callback instead. This approach is very
-effective, and people are generally comfortable with it, so it's a solid and
-perfectly valid way to write code. It could also easily be extended to handle
-not just a callback for success states, but another one for errors.
+effective, and people are generally comfortable with using callback-driven
+functions, so it's a solid and perfectly valid way to write code. It could also
+be extended to handle not just a callback for success states, but another one
+for errors.
 
 ``` javascript Improved version with callback/errback support
 function getManagers(callback, errback){
@@ -103,12 +105,13 @@ getManagers(function(managers){
 });
 ```
 
-That being said, callbacks can lead to tightly coupled code.  Occasionally,
-that's fine; when performing event handling, it makes sense that I am coupling
-an event to an action. For most asynchronous code, though, it means that I have
-to know up front how I want to process my information at the point of retrieving
-it. It makes it more difficult to write reusable abstractions of the process
-used to request data.
+Writing code that accepts callbacks and uses them is really simple.  That being
+said, callbacks can lead to tightly coupled code. Occasionally, that's fine;
+when performing event handling, it makes sense that I am coupling an event to an
+action. For most asynchronous code, though, it means that I have to know up
+front how I want to process my information at the point of retrieving it. It
+makes it more difficult to write reusable abstractions of the process used to
+request data.
 
 Fortunately, there is another approach available to us. Modern JavaScript
 libraries and toolkits offer us implementations of a concept known as promises.
