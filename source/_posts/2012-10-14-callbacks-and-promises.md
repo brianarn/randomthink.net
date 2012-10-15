@@ -7,26 +7,6 @@ categories:
 - Technical
 ---
 
-Summary: Blog post draft detailing the distinctions between callbacks and
-promises as a pattern
-
-## Outline:
-
-1. Introduce callbacks briefly
-	1. Show jQuery event style
-	2. Show jQuery / Dojo XHR
-	3. Link to detailed write-up somewhere?  1.Note the value of callbacks is
-	   for asynchronous code 1.Show example of writing a method to accept a
-	   callback
-	4. Simple function that accepts a success and error
-2. Abstract example into simple module
-3. Discuss coupled nature of this approach
-4. Introduce promises / Deferreds
-5. Rework module into promise based setup
-6. No one right way, these are two patterns
-
-## Draft:
-
 Anyone who's written even a little bit of JavaScript is likely familiar with the
 callback pattern. Even if you don't know the name, you've probably used it. We
 will often pass around functions to other functions as a way for the other
@@ -36,11 +16,13 @@ solution to responding to things that happen asynchrously.
 
 For example, events are based completely on this pattern. We take a DOM node,
 and provide it with a callback function to indicate that we want to be alerted
-to our user interacting with it in some way. 
+to our user interacting with it in some way.
+
+<!-- more -->
 
 ``` javascript Simple document-based click handler
 document.addEventListener("click", function(e){
-	console.log("Document was clicked!");
+  console.log("Document was clicked!");
 }, false);
 ```
 
@@ -52,105 +34,216 @@ However, more advanced applications may require us to start building our own
 APIs. In this scenario, it may be of benefit to us to create some code that is
 on the receiving end of a callback. It's quite easy to create a function that
 accepts callbacks. Because JavaScript functions are [first-class objects][1],
-you can receive them as arguments, and then simply invoke them, like so:
+you can receive them as arguments, and then simply invoke them.
 
-``` javascript Simple function that accepts callbacks
-function doSomethingAsync(callback, errback){
-	// We'll use this variable as the end result of this function
-	var result;
+I prefer [Dojo][] these days, but for simplicity's sake, I'll show an example
+using [jQuery][], as I suspect that's what more people will be familiar with.
 
-	try {
-		// Perform some asynchronous action that may
-		// potentially result in an error, like an Ajax request.
-		// Eventually, assign a value to `result` here.
-	} catch (err) {
-		// Something went wrong, so if we have the errback,
-		// hand out error back to the user.
-		if (typeof errback == 'function') {
-			errback(err);
-		}
-	}
-
-	// If I've hit this point in the code, it was a success,
-	// so hand back my result via callback.
-	if (typeof callback == 'function') {
-		callback(result);
-	}
+``` javascript Simple function that accepts a callback
+function getManagers(callback){
+  // Kick off our Ajax request for information.
+  $.ajax({
+    url: "/company/allEmployees.json",
+    dataType: "json",
+    success: function(data) {
+      // Using our callback, provide manager data to our user.
+      if (data.managers && typeof callback == "function") {
+        callback(data.managers);
+      }
+    }
+  });
 }
 ```
 
 Notice that in this case, I'm not returning anything from the function. I'm
-communicating with user via the callback, rather than through returning
-something to them. This approach is very effective, and people are generally
-comfortable with it, so it's a solid and perfectly valid way to write code.
+communicating with my user via the callback instead. This approach is very
+effective, and people are generally comfortable with it, so it's a solid and
+perfectly valid way to write code. It could also easily be extended to handle
+not just a callback for success states, but another one for errors.
 
-That being said, this approach can sometimes feel tightly coupled.
-Sometimes this is fine; when performing event handling, it makes sense that I am
-coupling an event to an action. However, in some code, particularly Ajax
-requests, it means that I have to know up front how I want to process my
-information at the point of retrieving it. For small things, that may be okay,
-but it makes it a bit more difficult to write reusable abstractions of the
-process used to request data.
+``` javascript Improved version with callback/errback support
+function getManagers(callback, errback){
+  // Kick off our Ajax request for information
+  $.ajax({
+    url: "/company/allEmployees.json",
+    dataType: "json",
+    success: function(data) {
+      // We're breaking the logic to check just for managers first,
+      // in order to better facilitate error handling.
+      if (data.managers) {
+        // We have our data, so invoke our callback.
+        if (typeof callback == "function") {
+          callback(data.managers);
+        }
+      } else if (typeof errback == "function") {
+        // We have no manager data, so if we have an errback,
+        // give it something meaningful to indicate failure.
+        errback(new Error("No managers found"));
+      }
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      // If we have the errback, just give it the error we got.
+      if (typeof errback == "function") {
+        errback(errorThrown);
+      }
+    }
+  });
+}
+```
 
-Additionally, asynchronous coding can be confusing at first because people are
-generally used to a more synchronous model, wherein one calls a function, and
-they get back some meaningful value from it that can be used immediately.
+Using this function is actually quite easy:
 
-Fortunately, there is another way these days of dealing with this scenario. If
-you're using writing non-trivial JS, you're probably using some sort of library
-or toolkit, and that means you likely have access to an implementation of
-promises. In computer science terms, a promise is simply an object that
-represents the value of an asynchronous action -  which happens to be the exact
-scenario we're discussing here.
+``` javascript Using getManagers
+// Simply call it and provide your callback.
+// In this case, I'm not going to worry about errors.
+getManagers(function(managers){
+  for (var i = 0, l = managers.length; i < l; i++) {
+    // Do something with each manager here
+  }
+});
+```
 
-Most of the people I know and work with will be using either jQuery or Dojo,
-	 both of which have implementations of promises. You can create a Deferred,
-	 which is the mechanism by which you make a promise to someone.
+That being said, callbacks can lead to tightly coupled code.  Occasionally,
+that's fine; when performing event handling, it makes sense that I am coupling
+an event to an action. For most asynchronous code, though, it means that I have
+to know up front how I want to process my information at the point of retrieving
+it. It makes it more difficult to write reusable abstractions of the process
+used to request data.
 
-Working with Deferreds is quite easy. You simply create an instance of one, and
-then when your value is ready, you `resolve` the Deferred with the value that it
-represents. If you hit an error state, you can `reject` the Deferred.
+Fortunately, there is another approach available to us. Modern JavaScript
+libraries and toolkits offer us implementations of a concept known as promises.
+In general terms, a promise is simply an object that represents the value of an
+asynchronous action. It's kind of like an IOU for information. It also happens
+to fit the above scenario quite well.
 
-Rework above function to use Deferreds here
+If you're using Dojo or jQuery, you already have promises available to you. You
+can create a Deferred object, which is the mechanism for creating and managing
+promises.
+
+Working with Deferreds is quite easy. You simply create an instance of the
+Deferred constructor, and then when your value is ready, you `resolve` the
+instance with the value that it represents. If you hit an error state, you can
+`reject` the instance. Let's take the above example and rework it to be using
+promises instead of callbacks.
+
+``` javascript Getting managers via Deferreds / promises
+function getManagers(callback, errback){
+  // Create our Deferred instance
+  var deferred = new $.Deferred();
+
+  // Then, we'll perform our Ajax request like before.
+  $.ajax({
+    url: "/company/allEmployees.json",
+    dataType: "json",
+    success: function(data) {
+      // This time though, we'll simply resolve or reject
+      // our Deferred instances.
+      if (data.managers) {
+        deferred.resolve(data.managers);
+      } else if (typeof errback == "function") {
+        deferred.reject(new Error("No managers found"));
+      }
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      deferred.reject(errorThrown);
+    }
+  });
+
+  // One _key_ difference: We're actively providing a return value,
+  // which we didn't before. We don't want to return the Deferred
+  // instance itself, as that's our control mechanism, so we'll
+  // return the promise that we're making.
+  return deferred.promise();
+}
+```
 
 You'll note that the above function almost feels synchronous. I create an object
 at the top, and I return it at the bottom. The user doesn't give me a callback,
-   but I give the user a meaningful object.
+but I give the user a meaningful object.
 
-This object that I'm giving back to them is the promise. The Deferred is the
-mechanism by which I manage the promise, but they don't get the whole thing --
-just the promise.
+This object that I'm giving back to them is the promise I'm making for the
+eventual result of that Ajax request. The Deferred is the mechanism by which I
+manage the promise, including resolution and rejection, but they don't get the
+whole thing -- just the promise.
 
-The promise gives them a `then` method, which they can then use to attach a
+The promise gives your user a `then` method, which they can then use to attach a
 callback and get access to the value, like so:
 
-Example of working with returned promise goes here
+``` javascript Using the return value from getManagers as a promise
+getManagers().then(function(managers){
+  for (var i = 0, l = managers.length; i < l; i++) {
+    // Do something with each manager here,
+    // such as render a list item.
+  }
+});
+```
 
 There is still a callback in action here, but now it's being managed more in the
 code that is generating the request, rather than in the code that is providing
 information. Additionally, promises allow you to attach more than one callback!
 
-Show multiple callbacks via then here
+``` javascript Reusing the return from getManagers
+// Fetch our managers and save the promise we get back.
+var managersPromise = getManagers();
+
+// Process the managers in some meaningful way
+// when they're available to us.
+managersPromise.then(function(managers){ /* ... */ });
+
+// Then, in code later on...
+managersPromise.then(function(managers){
+  // Do something else completely separate with the manager information.
+  // We don't actually do a server trip this time - we're re-using the
+  // information that was already retrieved!
+});
+```
 
 This ability to get at the information via multiple callbacks can be very
 powerful. On top of that, the way that promises work means that I can get the
-data even if the async action is already completed. The promise represents the
-value before the request is complete, and continues to do so once resolved.
+data even if the asynchronous action is already completed. The promise
+represents the value before the request is complete, and continues to do so once
+resolved.
 
-For doing something like this without writing your own request logic,
-	fortunately both Dojo and jQuery provide a sort of promise as the return
-	value of their various Ajax methods! That means that if you needed to
-	abstract away the process of making a request, it's easier than you might
-	think. That means you can use this promise approach even if you haven't
-	abstracted away your Ajax logic.
+There's also something to be said about reading promise-based code. It feels
+very natural. I take this action, `then` I take this other action. It can reduce
+excessive amounts of indentation, especially when doing a lot of Ajax work at
+once.
 
-Example of then-based request here
+In fact, this approach is so powerful that both jQuery and Dojo already provide
+a promise as the return value of their Ajax systems. Dojo's new `dojo/request`
+module is explicitly promise-driven, so requests look like this:
 
-When creating your own modules to abstract away the process of data retrieval
-from data consumption, either of these approaches is valid. However, using a
-promise means that you're giving your users back a meaningful object, and how
-the deal with the information is up to them. It feels a bit more loosely coupled
-as well, and leads to better reuse and modularization, which is always a nice
-bonus. Hopefully you'll consider using promises in your next application.
+``` javascript Using dojo/request to perform a request
+require(["dojo/request"], function(request){
+  request.get("/company/allEmployees.json", {
+    handleAs: "json"
+  }).then(function(data){
+    // Work with your data here
+  });
+});
+```
+
+When creating your own modules of code to abstract away the process of data
+retrieval from data consumption, both callbacks and promises are valid --
+there's not one right way to do it. However, using a promise means that you're
+giving your users back a meaningful object, and how they deal with the
+information is up to them. It leads to loosely coupled code, which in turn leads
+to better reuse and modularization.
+
+Hopefully you'll consider using promises in your next application! Please check
+out the links below for much more information on promises and Deferreds.
+
+* [Promises/A specification][2]
+* Dojo:
+  * [Getting Started with Deferreds][3]
+  * [Dojo Deferreds and Promises][4]
+* jQuery:
+  * [Deferred Object][5]
 
 [1]: http://en.wikipedia.org/wiki/First-class_function#Higher-order_functions:_passing_functions_as_arguments
+[2]: http://wiki.commonjs.org/wiki/Promises/A
+[3]: http://dojotoolkit.org/documentation/tutorials/1.8/deferreds/
+[4]: http://dojotoolkit.org/documentation/tutorials/1.8/promises/
+[5]: http://api.jquery.com/category/deferred-object/
+[Dojo]: http://dojotoolkit.org/
+[jQuery]: http://jquery.com/
