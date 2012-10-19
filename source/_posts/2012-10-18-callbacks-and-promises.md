@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Callbacks and Promises"
-date: 2012-10-14 21:36
+date: 2012-10-18 21:36
 comments: true
 categories:
 - Technical
