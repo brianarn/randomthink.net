@@ -11,12 +11,12 @@ Anyone who's written even a little bit of JavaScript is likely familiar with the
 callback pattern. Even if you don't know it by that name, you've probably
 written code using it. When calling a function, we'll pass it another function
 as an argument, which will be used to let us know that something has happened.
-In particular, callbacks are used for responding to things that happen
-asynchronously.
+In particular, callbacks are frequently used for responding to things that
+happen asynchronously.
 
 For example, event handling is based on this pattern. We take a DOM node and
-provide it with a callback function to indicate that we want to be alerted to
-our user interacting with it in some way.
+provide it with a callback function so that when the associated event occurs on
+that node, it has a way of letting us know what's going on.
 
 <!-- more -->
 
@@ -33,12 +33,11 @@ too much of it.
 As we create richer applications, we'll often need to create functions that pass
 information back to our users. If the information we're passing back comes from
 asynchronous sources, it may be beneficial to create functions that that accept
-callbacks. It's quite easy to create a function that accepts callbacks. Because
-JavaScript functions are [first-class objects][1], you can receive them as
-arguments, and then simply invoke them.
+callbacks. Because JavaScript functions are [first-class objects][1], you can
+receive them as arguments, and then simply invoke them.
 
 I prefer [Dojo][] these days, but for simplicity's sake, I'll show an example
-using [jQuery][], as I suspect that's what more people will be familiar with.
+using [jQuery][], as I suspect that will be more familiar to most people.
 
 ``` javascript Simple function that accepts a callback
 function getManagers(callback){
@@ -56,12 +55,12 @@ function getManagers(callback){
 }
 ```
 
-Notice that in this case, I'm not returning anything from the function. I'm
-communicating with my user via the callback instead. This approach is very
-effective, and people are generally comfortable with using callback-driven
-functions, so it's a solid and perfectly valid way to write code. It could also
-be extended to handle not just a callback for success states, but another one
-for errors.
+Notice that in this case, I'm not returning anything from the `getManagers`
+function. I'm communicating with my user by invoking the callback they've
+provided to me. This approach is very effective, and people are generally
+comfortable with using callback-driven functions, so it's a solid and perfectly
+valid way to write code. It could also be extended to handle not just a callback
+for success states, but another one for errors.
 
 ``` javascript Improved version with callback/errback support
 function getManagers(callback, errback){
@@ -105,13 +104,11 @@ getManagers(function(managers){
 });
 ```
 
-Writing code that accepts callbacks and uses them is really simple.  That being
-said, callbacks can lead to tightly coupled code. Occasionally, that's fine;
-when performing event handling, it makes sense that I am coupling an event to an
-action. For most asynchronous code, though, it means that I have to know up
-front how I want to process my information at the point of retrieving it. It
-makes it more difficult to write reusable abstractions of the process used to
-request data.
+Writing code that accepts callbacks and uses them is really simple. That being
+said, callbacks can lead to tightly coupled code. It means that I have to know
+how I want to process my information at the point of retrieving it. It makes it
+more difficult to write reusable abstractions of the process used to request
+data.
 
 Fortunately, there is another approach available to us. Modern JavaScript
 libraries and toolkits offer us implementations of a concept known as promises.
@@ -130,7 +127,7 @@ instance with the value that it represents. If you hit an error state, you can
 promises instead of callbacks.
 
 ``` javascript Getting managers via Deferreds / promises
-function getManagers(callback, errback){
+function getManagers(){
   // Create our Deferred instance
   var deferred = new $.Deferred();
 
@@ -143,7 +140,7 @@ function getManagers(callback, errback){
       // our Deferred instances.
       if (data.managers) {
         deferred.resolve(data.managers);
-      } else if (typeof errback == "function") {
+      } else {
         deferred.reject(new Error("No managers found"));
       }
     },
@@ -152,25 +149,28 @@ function getManagers(callback, errback){
     }
   });
 
-  // One _key_ difference: We're actively providing a return value,
-  // which we didn't before. We don't want to return the Deferred
-  // instance itself, as that's our control mechanism, so we'll
-  // return the promise that we're making.
+  // Give our user the promise object that represents
+  // our managers.
   return deferred.promise();
 }
 ```
 
-You'll note that the above function almost feels synchronous. I create an object
-at the top, and I return it at the bottom. The user doesn't give me a callback,
+One key difference above is that we're actively providing a return value now,
+whereas in the callback-based version, we didn't. This object that we're
+returning is the promise that we're giving to our user, and it provides them
+with the ability to get the information we're promising, once that data is
+available.
+
+The Deferred is the mechanism by which I manage the promise. It gives me the
+ability to create a promise that I provide to my end user, as well as the
+ability to then fulfill that promise in a meaningful way.
+
+This approach almost feels synchronous. I create an object at the top of my
+function, and I return it at the bottom. The user doesn't give me a callback,
 but I give the user a meaningful object.
 
-This object that I'm giving back to them is the promise I'm making for the
-eventual result of that Ajax request. The Deferred is the mechanism by which I
-manage the promise, including resolution and rejection, but they don't get the
-whole thing -- just the promise.
-
-The promise gives your user a `then` method, which they can then use to attach a
-callback and get access to the value, like so:
+The promise object gives your user a `then` method, which they can then use to
+attach a callback and get access to the value, like so:
 
 ``` javascript Using the return value from getManagers as a promise
 getManagers().then(function(managers){
@@ -181,31 +181,10 @@ getManagers().then(function(managers){
 });
 ```
 
-There is still a callback in action here, but now it's being managed more in the
-code that is generating the request, rather than in the code that is providing
-information. Additionally, promises allow you to attach more than one callback!
-
-``` javascript Reusing the return from getManagers
-// Fetch our managers and save the promise we get back.
-var managersPromise = getManagers();
-
-// Process the managers in some meaningful way
-// when they're available to us.
-managersPromise.then(function(managers){ /* ... */ });
-
-// Then, in code later on...
-managersPromise.then(function(managers){
-  // Do something else completely separate with the manager information.
-  // We don't actually do a server trip this time - we're re-using the
-  // information that was already retrieved!
-});
-```
-
-This ability to get at the information via multiple callbacks can be very
-powerful. On top of that, the way that promises work means that I can get the
-data even if the asynchronous action is already completed. The promise
-represents the value before the request is complete, and continues to do so once
-resolved.
+There is still a callback in action here, but now it's being managed in the code
+that is consuming the information, rather than in the code that is providing it.
+We've effectively decoupled the process of retrieving information from the
+process of consuming it, which is a huge win for creating reusable code.
 
 There's also something to be said about reading promise-based code. It feels
 very natural. I take this action, `then` I take this other action. It can reduce
@@ -213,8 +192,8 @@ excessive amounts of indentation, especially when doing a lot of Ajax work at
 once.
 
 In fact, this approach is so powerful that both jQuery and Dojo already provide
-a promise as the return value of their Ajax systems. Dojo's new `dojo/request`
-module is explicitly promise-driven, so requests look like this:
+a promise as the return value of their Ajax systems. Dojo 1.8's new
+`dojo/request` module is explicitly promise-driven, so requests look like this:
 
 ``` javascript Using dojo/request to perform a request
 require(["dojo/request"], function(request){
@@ -233,15 +212,16 @@ giving your users back a meaningful object, and how they deal with the
 information is up to them. It leads to loosely coupled code, which in turn leads
 to better reuse and modularization.
 
-Hopefully you'll consider using promises in your next application! Please check
-out the links below for much more information on promises and Deferreds.
+Hopefully you'll consider using promises in your next application! I've barely
+scratched the surface of what makes them awesome. Check out the links below for
+much more information on promises and Deferreds. Thanks for reading!
 
-* [Promises/A specification][2]
 * Dojo:
   * [Getting Started with Deferreds][3]
   * [Dojo Deferreds and Promises][4]
 * jQuery:
   * [Deferred Object][5]
+* [Promises/A specification][2]
 
 [1]: http://en.wikipedia.org/wiki/First-class_function#Higher-order_functions:_passing_functions_as_arguments
 [2]: http://wiki.commonjs.org/wiki/Promises/A
