@@ -50,5 +50,5 @@ see how the dice are screwing me.
 
 [catan]: http://www.catan.com/catan-games/boardgame.html
 [dom]: http://www.riograndegames.com/games.html?id=278
-[ss]: {{ site.url }}/ScoreSettler
+[ss]: http://brianarn.github.com/ScoreSettler
 [sss]: http://github.com/brianarn/ScoreSettler
