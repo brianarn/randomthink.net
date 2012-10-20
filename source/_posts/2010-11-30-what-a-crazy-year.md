@@ -1,5 +1,5 @@
 ---
-title: What a crazy year
+title: "What a crazy year"
 layout: post
 categories:
 - Personal
