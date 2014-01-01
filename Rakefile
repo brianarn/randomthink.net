@@ -8,7 +8,7 @@ require 'rake/minify'
 ssh_user       = "brian@randomthink.net"
 ssh_port       = "22"
 document_root  = "~/hosts/randomthink.net/"
-rsync_delete   = true
+rsync_delete   = false
 deploy_default = "rsync"
 
 # Hidden "dot" files that should be included with the deployed site (see task copydot)
@@ -329,7 +329,7 @@ multitask :push do
       puts "\n## GitHub Pages deploy complete"
     end
   else
-    puts "This project isn't configured for deploying to GitHub Pages\nPlease run `rake setup_github_pages[your-deployment-repo-url]`." 
+    puts "This project isn't configured for deploying to GitHub Pages\nPlease run `rake setup_github_pages[your-deployment-repo-url]`."
   end
 end
 
@@ -430,12 +430,12 @@ task :setup_github_pages, :repo do |t, args|
     f.write rakefile
   end
 
-  # Configure published url 
+  # Configure published url
   jekyll_config = IO.read('_config.yml')
   current_url = /^url:\s?(.*$)/.match(jekyll_config)[1]
   has_cname = File.exists?("#{source_dir}/CNAME")
   if current_url == 'http://yoursite.com'
-    jekyll_config.sub!(/^url:.*$/, "url: #{url}") 
+    jekyll_config.sub!(/^url:.*$/, "url: #{url}")
     File.open('_config.yml', 'w') do |f|
       f.write jekyll_config
     end
